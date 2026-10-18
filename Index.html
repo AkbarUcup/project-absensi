@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Hukum Ekonomi Syariah</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { max-width: 650px; margin: 30px auto; padding: 20px; background-color: #f4f6f9; }
+    .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    h2 { text-align: center; color: #1f2937; }
+    h3 { color: #374151; border-bottom: 2px solid #2563eb; padding-bottom: 8px; margin-top: 0; }
+    .hidden { display: none; }
+    label { font-size: 14px; font-weight: 600; color: #4b5563; }
+    select, input { width: 100%; padding: 10px; margin: 8px 0 16px 0; border: 1px solid #d1d5db; border-radius: 6px; }
+    .btn { width: 100%; padding: 12px; background: #2563eb; color: white; border: none; cursor: pointer; border-radius: 6px; font-weight: bold; margin-top: 5px; }
+    .btn:hover { background: #1d4ed8; }
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-secondary { background: #6b7280; }
+    .btn-secondary:hover { background: #4b5563; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; font-size: 14px; }
+    th { background-color: #f9fafb; }
+  </style>
+</head>
+<body>
+
+  <h2>Sistem Absensi Hukum Ekonomi Syariah</h2>
+
+  <!-- FORM LOGIN -->
+  <div id="loginSection" class="card">
+    <h3>Login User</h3>
+    <label>NIM / NIP:</label>
+    <input type="text" id="loginNim" placeholder="Masukkan NIM atau NIP">
+    
+    <label>Password:</label>
+    <input type="password" id="loginPass" placeholder="Masukkan Password">
+    
+    <button class="btn" onclick="doLogin()">Login</button>
+  </div>
+
+  <!-- DASHBOARD DOSEN -->
+  <div id="dosenSection" class="hidden card">
+    <h3>Dashboard Dosen</h3>
+    <p>Selamat datang, <b id="dosenNama"></b></p>
+    
+    <label>Pilih Mata Kuliah untuk Lihat Rekap:</label>
+    <select id="dosenMatkul" onchange="loadRekapDosen()">
+      <option value="Hukum Pajak">Hukum Pajak</option>
+      <option value="Hak atas Kekayaan Intelektual">Hak atas Kekayaan Intelektual</option>
+      <option value="Hukum Jaminan">Hukum Jaminan</option>
+      <option value="Etika Profesi Hukum">Etika Profesi Hukum</option>
+      <option value="Hukum Acara Perdata">Hukum Acara Perdata</option>
+      <option value="Hukum Arbitrase">Hukum Arbitrase</option>
+      <option value="Hukum Dagang">Hukum Dagang</option>
+      <option value="Hukum Persaingan">Hukum Persaingan</option>
+      <option value="Metode Penelitian">Metode Penelitian</option>
+      <option value="Hukum Acara Pidana">Hukum Acara Pidana</option>
+    </select>
+
+    <table>
+      <thead>
+        <tr>
+          <th>NIM</th>
+          <th>Nama</th>
+          <th>Pertemuan</th>
+          <th>Waktu</th>
+        </tr>
+      </thead>
+      <tbody id="rekapTable"></tbody>
+    </table>
+    <br>
+    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- DASHBOARD PJ KELAS -->
+  <div id="pjSection" class="hidden card">
+    <h3>Dashboard Penanggung Jawab (PJ)</h3>
+    <p>Selamat datang, <b id="pjNama"></b></p>
+
+    <label>Pilih Mata Kuliah:</label>
+    <select id="pjMatkul">
+      <option value="Hukum Pajak">Hukum Pajak</option>
+      <option value="Hak atas Kekayaan Intelektual">Hak atas Kekayaan Intelektual</option>
+      <option value="Hukum Jaminan">Hukum Jaminan</option>
+      <option value="Etika Profesi Hukum">Etika Profesi Hukum</option>
+      <option value="Hukum Acara Perdata">Hukum Acara Perdata</option>
+      <option value="Hukum Arbitrase">Hukum Arbitrase</option>
+      <option value="Hukum Dagang">Hukum Dagang</option>
+      <option value="Hukum Persaingan">Hukum Persaingan</option>
+      <option value="Metode Penelitian">Metode Penelitian</option>
+      <option value="Hukum Acara Pidana">Hukum Acara Pidana</option>
+    </select>
+
+    <label>Pilih Pertemuan:</label>
+    <select id="pjPertemuan">
+      <option value="Pertemuan 1">Pertemuan 1</option>
+      <option value="Pertemuan 2">Pertemuan 2</option>
+      <option value="Pertemuan 3">Pertemuan 3</option>
+      <option value="Pertemuan 4">Pertemuan 4</option>
+      <option value="Pertemuan 5">Pertemuan 5</option>
+      <option value="Pertemuan 6">Pertemuan 6</option>
+      <option value="Pertemuan 7">Pertemuan 7</option>
+    </select>
+
+    <button class="btn" onclick="toggleSesi('AKTIF')">Buka Sesi Absensi</button>
+    <button class="btn btn-danger" style="margin-top: 10px;" onclick="toggleSesi('TUTUP')">Tutup Sesi Absensi</button>
+    <br><br>
+    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- DASHBOARD MAHASISWA -->
+  <div id="mhsSection" class="hidden card">
+    <h3>Dashboard Mahasiswa</h3>
+    <p>Nama: <b id="mhsNama"></b> (<span id="mhsNim"></span>)</p>
+
+    <label>Pilih Mata Kuliah:</label>
+    <select id="mhsMatkul">
+      <option value="Hukum Pajak">Hukum Pajak</option>
+      <option value="Hak atas Kekayaan Intelektual">Hak atas Kekayaan Intelektual</option>
+      <option value="Hukum Jaminan">Hukum Jaminan</option>
+      <option value="Etika Profesi Hukum">Etika Profesi Hukum</option>
+      <option value="Hukum Acara Perdata">Hukum Acara Perdata</option>
+      <option value="Hukum Arbitrase">Hukum Arbitrase</option>
+      <option value="Hukum Dagang">Hukum Dagang</option>
+      <option value="Hukum Persaingan">Hukum Persaingan</option>
+      <option value="Metode Penelitian">Metode Penelitian</option>
+      <option value="Hukum Acara Pidana">Hukum Acara Pidana</option>
+    </select>
+
+    <button class="btn" onclick="submitAbsen()">Kirim Presensi (Hadir)</button>
+    <br><br>
+    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    // TEMPELKAN URL DEPLOYMENT WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+    let currentUser = null;
+
+    async function doLogin() {
+      const nim_nip = document.getElementById('loginNim').value.trim();
+      const password = document.getElementById('loginPass').value.trim();
+
+      if (!nim_nip || !password) return alert("Isi NIM/NIP dan Password!");
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'login', nim_nip, password }),
+          redirect: "follow"
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          currentUser = data.user;
+          document.getElementById('loginSection').classList.add('hidden');
+
+          if (currentUser.role === 'Dosen') {
+            document.getElementById('dosenSection').classList.remove('hidden');
+            document.getElementById('dosenNama').textContent = currentUser.nama;
+            loadRekapDosen();
+          } else if (currentUser.role === 'PJ') {
+            document.getElementById('pjSection').classList.remove('hidden');
+            document.getElementById('pjNama').textContent = currentUser.nama;
+          } else {
+            document.getElementById('mhsSection').classList.remove('hidden');
+            document.getElementById('mhsNama').textContent = currentUser.nama;
+            document.getElementById('mhsNim').textContent = currentUser.nim_nip;
+          }
+        } else {
+          alert(data.message);
+        }
+      } catch (err) {
+        alert("Kesalahan Koneksi: " + err.toString());
+      }
+    }
+
+    async function toggleSesi(status) {
+      const matkul = document.getElementById('pjMatkul').value;
+      const pertemuan = document.getElementById('pjPertemuan').value;
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'toggleSesi', matkul, pertemuan, status }),
+          redirect: "follow"
+        });
+        const data = await res.json();
+        alert(data.message);
+      } catch (err) {
+        alert("Gagal memproses sesi: " + err.toString());
+      }
+    }
+
+    async function submitAbsen() {
+      const matkul = document.getElementById('mhsMatkul').value;
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'submitAbsen', matkul, nim: currentUser.nim_nip, nama: currentUser.nama }),
+          redirect: "follow"
+        });
+        const data = await res.json();
+        alert(data.message);
+      } catch (err) {
+        alert("Gagal mengirim presensi: " + err.toString());
+      }
+    }
+
+    async function loadRekapDosen() {
+      const matkul = document.getElementById('dosenMatkul').value;
+      const tbody = document.getElementById('rekapTable');
+      tbody.innerHTML = '<tr><td colspan="4">Memuat data...</td></tr>';
+
+      try {
+        const res = await fetch(`${GAS_URL}?action=getRekap&matkul=${encodeURIComponent(matkul)}`);
+        const responseData = await res.json();
+        tbody.innerHTML = '';
+        
+        if (responseData.status === 'success') {
+          if (responseData.data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada data presensi</td></tr>';
+            return;
+          }
+
+          responseData.data.forEach(row => {
+            const tr = document.createElement('tr');
+            const dateFormatted = row[0] ? new Date(row[0]).toLocaleString('id-ID') : '-';
+            tr.innerHTML = `
+              <td>${row[1]}</td>
+              <td>${row[2]}</td>
+              <td>${row[4]}</td>
+              <td>${dateFormatted}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4">Gagal memuat rekap: ${err.toString()}</td></tr>`;
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('loginNim').value = '';
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginSection').classList.remove('hidden');
+      document.getElementById('dosenSection').classList.add('hidden');
+      document.getElementById('pjSection').classList.add('hidden');
+      document.getElementById('mhsSection').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
